@@ -131,7 +131,7 @@ def printText(texto,x,y,sl,color):
 # imprime(texto,n,xc,x,1,color)
 
                     xc = len(diccionario[texto[n]])+1 - (x + puntero)
-                    imprime(texto,n,xc,x,1,color)
+                    imprime(texto,n,xc,x,y,1,color)
                     return
                 else:
 # print("SL------>Xc: ",xc,"  n------->",n)
@@ -139,10 +139,10 @@ def printText(texto,x,y,sl,color):
                     puntero = puntero + sl
                     if((x+puntero)>1):
                         xc = x + puntero
-                        imprime(texto,n,0,x,xc,color)
+                        imprime(texto,n,0,x,y,xc,color)
                         return
         else:
-            imprime(texto,0,0,x,1,color)
+            imprime(texto,0,0,x,y,1,color)
             return
     return
 
@@ -152,7 +152,7 @@ def printText(texto,x,y,sl,color):
 # sl es el numero de columna desde donde imprime el primer caracter Solo se utiliza parta x<1
 # xo es el valor inicial de x donde se comienza a escribir si x > 1
 
-def imprime(texto,n,ni,x,sl,color):
+def imprime(texto,n,ni,x,y,sl,color):
 
     if (x > 0):
         nm = (int((x-1)/COL)) + 1
@@ -174,8 +174,13 @@ def imprime(texto,n,ni,x,sl,color):
         while(ni < COL):
             if (i < len(diccionario[texto[n]])):
                 for j in range(ROW):
-                    if(diccionario[texto[n]][i] >> (7-j)) & 1:
-                        pixels[barrido(j,ni,0)] = color
+                    if(y > 0):
+                        if(diccionario[texto[n]][i] >> (7-j+y-1)) & 1:
+                            pixels[barrido(j,ni,0)] = color
+                    else:
+                        if(diccionario[texto[n]][i] << - (y - 1)>> (7-j)) & 1:
+                            pixels[barrido(j,ni,0)] = color
+
                 i += 1
                 ni += 1
             else:
@@ -208,22 +213,21 @@ def imprime(texto,n,ni,x,sl,color):
 # Bucle principal
 while True:
     texto1="MB1M1B23456789009873124312345"
-    texto2="Hola Que tal como va todo"
+   # texto2="Hola Que tal como va todo"
     
     
     try:
         color = (0,0,30)
         #scrollG(texto1,.5,0)
         #pruebaMatriz(.1)
-        x=10
-        
-        while(x>-60):
-        
-            y= 1
-       # print("X = ",x)
-            printText("A3B0123456789",x,y,2,(0,0,30))
-    #imprime("M", -1, 3, 1,color)
-            x -= 1
+        x=1
+        y=-8
+        while(y<9):
+            
+            x=-y
+            #y= int(x/10)
+            printText("A3B0123456789",x,y,2,(0,100,30))
+            y += 1
             time.sleep(.09)
 
   
